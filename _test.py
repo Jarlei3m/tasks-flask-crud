@@ -61,3 +61,18 @@ def test_update_task() :
     assert payload["description"] == response_json["description"]
     assert "title" in response_json
     assert payload["title"] == response_json["title"]
+
+def test_delete_task():
+  if tasks:
+    task_id = tasks[0]
+
+    response = requests.delete(f"{BASE_URL}/tasks/{task_id}")
+    assert response.status_code == 200
+    response_json = response.json()
+    assert "message" in response_json
+
+    # Verificar se tarefa não existe mais
+    response = requests.get(f"{BASE_URL}/tasks/{task_id}")
+    response.status_code == 404
+    response_json = response.json()
+    assert "message" in response_json
